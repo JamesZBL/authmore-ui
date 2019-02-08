@@ -8,15 +8,15 @@ const FooterView = () => (
     <GlobalFooter
       links={[
         {
-          key: 'Pro 首页',
-          title: 'Pro 首页',
-          href: 'https://pro.ant.design',
+          key: '摆码王子的小屋',
+          title: '摆码王子的小屋',
+          href: 'https://b.letec.top',
           blankTarget: true,
         },
         {
           key: 'github',
           title: <Icon type="github" />,
-          href: 'https://github.com/ant-design/ant-design-pro',
+          href: 'https://gitee.com/zbl1996',
           blankTarget: true,
         },
         {
@@ -28,7 +28,7 @@ const FooterView = () => (
       ]}
       copyright={
         <Fragment>
-          Copyright <Icon type="copyright" /> 2018 蚂蚁金服体验技术部出品
+          Copyright <Icon type="copyright" /> 2019 摆码王子
         </Fragment>
       }
     />

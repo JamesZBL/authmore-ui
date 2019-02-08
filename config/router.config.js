@@ -18,7 +18,19 @@ export default [
     authority: ['admin', 'user'],
     routes: [
       // dashboard
-      { path: '/', redirect: '/dashboard/analysis' },
+      { path: '/', redirect: '/oauth/client' },
+      {
+        path: '/oauth',
+        name: 'oauth',
+        icon: 'dashboard',
+        routes: [
+          {
+            path: '/oauth/client',
+            name: 'client',
+            component: './OAuth/OAuthClient'
+          }
+        ]
+      },
       {
         path: '/dashboard',
         name: 'dashboard',
