@@ -1,4 +1,4 @@
-import { queryOAuthClient } from '@/services/oauth';
+import { queryOAuthClient, addOAuthClient } from '@/services/oauth';
 
 export default {
   namespace: 'client',
@@ -14,6 +14,14 @@ export default {
         type: 'save',
         payload: response,
       });
+    },
+    *add({ payload, callback }, { call, put }) {
+      const response = yield call(addOAuthClient, payload);
+      yield put({
+        type: 'save',
+        payload: response,
+      });
+      if (callback) callback(response);
     },
   },
 

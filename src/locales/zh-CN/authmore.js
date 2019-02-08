@@ -1,4 +1,4 @@
 export default {
-    'menu.oauth': '认证配置',
-    'menu.oauth.client': '客户端'
+    'menu.oauth': '认证服务',
+    'menu.oauth.client': '应用管理'
 }

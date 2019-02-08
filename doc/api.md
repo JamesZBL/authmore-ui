@@ -62,9 +62,8 @@ GET     /client
 POST    /client   
 ```json
 {
-    "clientId": "crudapp",
+    "clientName": "Siri",
     "resourceIds": null,
-    "clientSecret": "123456",
     "authorities": "ADMIN,NOTIFY",
     "accessTokenValiditySeconds": 7200,
     "refreshTokenValiditySeconds": null,
@@ -160,3 +159,14 @@ DELETE  /user/{user_id}
 ```json
 /user/5c5ba57ca4ca76380cea0a71
 ```
+
+
+
+
+## 修改记录
+
+1. client get 添加 clientName
+2. client post 删除 clientId, clientSecret
+3. client post 响应 改为 { "clientId": "xxxxx", "clientSecret": "xxxxxx" }, 服务端随机生成 id 和 secret，并返回两者明文，服务端加密存储
+4. client post 添加 clientName
+5. client 添加查重接口 /client/exist?name={name} 响应 { "exists": false }
