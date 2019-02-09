@@ -1,61 +1,15 @@
 import React, { Component, PureComponent, Fragment } from "react";
-import { Card, Form, Tag, Badge, Modal, Button, Input } from "antd";
+import { Card, Form, Tag, Badge, Modal, Button, Input, Divider, message } from "antd";
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import { connect } from "dva";
 import StandardTable from "@/components/StandardTable";
 import tableStyles from '@/pages/List/TableList.less';
+import router from 'umi/router';
+import EditClient from './EditClient';
 
 const FormItem = Form.Item;
 
-@Form.create()
-class CreateForm extends PureComponent {
-
-  handleSubmit = () => {
-    const { form, handleAdd } = this.props;
-    form.validateFields((err, values) => {
-      if (err) return;
-      handleAdd(values);
-      form.resetFields();
-    })
-  }
-
-  handleCancle = () => {
-    const { handleModalVisible, form } = this.props;
-    form.resetFields();
-    handleModalVisible(false);
-  }
-
-  render() {
-    const { modalVisible, form } = this.props;
-    return (
-      <Modal visible={modalVisible} onOk={this.handleSubmit} onCancel={this.handleCancle}>
-        <FormItem key="clientName" label="应用名称">
-          {form.getFieldDecorator('clientName', {
-            rules: [{ required: true, message: '请输入应用名称！' }],
-          })(<Input placeholder="请输入" />)}
-        </FormItem>
-      </Modal>
-    );
-  }
-}
-
-const CreateResultModal = props => {
-  const { modalVisible, handleModalVisible, clientId, clientSecret } = props;
-
-  return (
-    <Modal
-      visible={modalVisible}
-      title="应用创建结果"
-      onOk={() => handleModalVisible()}
-      onCancel={() => handleModalVisible()}
-    >
-      AppId:  {clientId}<br />
-      AppSecret: {clientSecret}
-    </Modal>
-  );
-};
-
-const authTypes = {
+export const authTypes = {
   'password': '密码模式',
   'authorization_code': '授权码模式',
   'implicit': '简化模式',
@@ -76,33 +30,18 @@ class OAuthClient extends PureComponent {
 
   state = {
     selectedRows: [],
-    resultModalVisible: false,
-    createModalVisible: false,
-    clientId: 'xxx',
-    clientSecret: 'xxx',
+    editModalVisible: false,
+    currentRecord: {},
   };
 
   rowKey = 'clientId';
   title = '应用管理';
 
   columns = [
-    // {
-    //   title: 'AppId',
-    //   dataIndex: 'clientId'
-    // },
     {
       title: '应用名称',
       dataIndex: 'clientName',
     },
-    // {
-    //   title: 'AppSecret',
-    //   dataIndex: 'clientSecret',
-    //   render: secret => {
-    //     if(secret) {
-    //       return secret.split('}')[1].substring(0,32) + '...';
-    //     }
-    //   },
-    // },
     {
       title: '认证方式',
       dataIndex: 'authorizedGrantTypes',
@@ -126,17 +65,34 @@ class OAuthClient extends PureComponent {
     {
       title: '回调 URI',
       dataIndex: 'registeredRedirectUri',
-      render: val => val[0],
+      render: urls => (
+        <Fragment>
+          {urls.map(url => <Tag key={url} >{url}</Tag>)}
+        </Fragment>
+      )
     },
     {
       title: '令牌有效期',
       dataIndex: 'accessTokenValiditySeconds',
       render: val => {
+        if (val < 60) return `${val} 秒`;
         if (val < 3600) {
+          if (val % 60) return `${val} 秒`;
           return `${val / 60} 分钟`
         }
+        if (val % 3600) return `${val} 秒`;
         return `${val / 3600} 小时`
       },
+    },
+    {
+      title: '操作',
+      render: (text, record) => (
+        <Fragment>
+          <a onClick={() => this.handleUpdateModalVisible(true, record)}>配置</a>
+          <Divider type="vertical" />
+          <a onClick={() => this.handleDelete(record)}>删除</a>
+        </Fragment>
+      ),
     },
   ];
 
@@ -151,11 +107,15 @@ class OAuthClient extends PureComponent {
     return result;
   }
 
-  componentDidMount() {
+  fetchClient() {
     const { dispatch } = this.props;
     dispatch({
       type: 'client/fetch',
     });
+  }
+
+  componentDidMount() {
+    this.fetchClient();
   }
 
   handleSelectRows = rows => {
@@ -165,35 +125,50 @@ class OAuthClient extends PureComponent {
   };
 
   handleClickAddClient() {
-    this.handleCreateModalVisible(true);
+    router.push('/oauth/client/create');
   }
 
-  handleResultModalVisible = flag => {
+  handleUpdateModalVisible = (visible, record) => {
     this.setState({
-      resultModalVisible: !!flag,
+      editModalVisible: !!visible,
+      currentRecord: record,
     });
   }
 
-  handleCreateModalVisible = flag => {
-    this.setState({
-      createModalVisible: !!flag,
-    });
-  }
-
-  handleAddClient = form => {
+  handleUpdate = (modified) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'client/add',
-      payload: form,
-      callback: val => {
-        const { clientId, clientSecret } = val;
-        this.setState({
-          clientId,
-          clientSecret,
-          createModalVisible: false,
-          resultModalVisible: true,
-        });
+      type: 'client/update',
+      payload: modified,
+      callback: () => {
+        this.handleUpdateModalVisible(false);
+        message.success('修改成功');
       }
+    })
+  }
+
+  handleDelete = (record) => {
+    const { clientId, clientName } = record;
+    // ...
+    Modal.confirm({
+      title: '删除应用',
+      content: `确定删除 ${clientName} 这个应用吗？`,
+      okText: '确认',
+      cancelText: '取消',
+      onOk: () => {
+        this.deleteClient({ clientId });
+      }
+    });
+  }
+  
+  deleteClient = (client) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'client/delete',
+      payload: client,
+      callback: () => {
+        this.fetchClient();
+      },
     });
   }
 
@@ -202,13 +177,9 @@ class OAuthClient extends PureComponent {
       client: { data },
       loading,
     } = this.props;
-    const { selectedRows, resultModalVisible: modalVisible } = this.state;
-    const parentMethods = { handleModalVisible: this.handleResultModalVisible };
-    const createFormProps = {
-      handleModalVisible: this.handleCreateModalVisible,
-      modalVisible: this.state.createModalVisible,
-      handleAdd: this.handleAddClient,
-    };
+    const { selectedRows, editModalVisible, currentRecord } = this.state;
+    const { handleUpdateModalVisible, handleUpdate } = this;
+    const methods = { handleUpdateModalVisible, handleUpdate };
 
     return (
       <PageHeaderWrapper title={this.title}>
@@ -229,8 +200,7 @@ class OAuthClient extends PureComponent {
             />
           </div>
         </Card>
-        <CreateResultModal modalVisible={modalVisible} {...parentMethods} {...data} />
-        <CreateForm {...createFormProps} />
+        <EditClient visible={editModalVisible} record={currentRecord} {...methods} />
       </PageHeaderWrapper>
     );
   }

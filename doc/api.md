@@ -63,14 +63,13 @@ POST    /client
 ```json
 {
     "clientName": "Siri",
-    "resourceIds": null,
-    "authorities": "ADMIN,NOTIFY",
+    "resourceIds": [],
+    "authorities": ["ADMIN", "NOTIFY"],
     "accessTokenValiditySeconds": 7200,
     "refreshTokenValiditySeconds": null,
-    "additionalInformation": "",
-    "scope": "user:read",
-    "authorizedGrantTypes": "password",
-    "registeredRedirectUri": null,
+    "scope": ["user:read", "write"],
+    "authorizedGrantTypes": ["password", "implicit"],
+    "registeredRedirectUri": [],
     "scoped": true,
     "secretRequired": true
 }
@@ -80,15 +79,14 @@ PUT     /client
 ```json
 {
     "clientId": "crudapp",
-    "resourceIds": null,
-    "clientSecret": "123456",
-    "authorities": "ADMIN,NOTIFY",
+    "clientName": "Siri",
+    "resourceIds": [],
+    "authorities": ["ADMIN", "NOTIFY"],
     "accessTokenValiditySeconds": 7200,
     "refreshTokenValiditySeconds": null,
-    "additionalInformation": "",
-    "scope": "user:read",
-    "authorizedGrantTypes": "password",
-    "registeredRedirectUri": null,
+    "scope": ["user:read", "write"],
+    "authorizedGrantTypes": ["password", "implicit"],
+    "registeredRedirectUri": [],
     "scoped": true,
     "secretRequired": true
 }
@@ -99,6 +97,12 @@ DELETE  /client/{app_id}
 /client/crudapp
 ```
 
+GET     /client/exist?clientName={clientName}
+```json
+{
+    "result": false 
+}
+```
 
 ## User
 
@@ -169,4 +173,6 @@ DELETE  /user/{user_id}
 2. client post 删除 clientId, clientSecret
 3. client post 响应 改为 { "clientId": "xxxxx", "clientSecret": "xxxxxx" }, 服务端随机生成 id 和 secret，并返回两者明文，服务端加密存储
 4. client post 添加 clientName
-5. client 添加查重接口 /client/exist?name={name} 响应 { "exists": false }
+5. client 添加查重接口 /client/exist?clientName={clientName} 响应 { "result": false }
+6. client post put 多处修改，原来的逗号分割字符串改为数组，服务端转换会逗号字符串再保存
+7. client post put 删除 additionalInformation

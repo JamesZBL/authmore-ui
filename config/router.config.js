@@ -18,16 +18,44 @@ export default [
     authority: ['admin', 'user'],
     routes: [
       // dashboard
-      { path: '/', redirect: '/oauth/client' },
+      { path: '/', redirect: '/oauth/client/index' },
       {
         path: '/oauth',
         name: 'oauth',
         icon: 'dashboard',
         routes: [
+          { path: '/oauth/client', redirect: '/oauth/client/index' },
           {
-            path: '/oauth/client',
+            path: '/oauth/client/index',
             name: 'client',
-            component: './OAuth/OAuthClient'
+            component: './OAuth/OAuthClient',
+          },
+          {
+            path: '/oauth/client/create',
+            name: 'create_client',
+            component: './OAuth/AddClient',
+            hideChildrenInMenu: true,
+            routes: [
+              {
+                path: '/oauth/client/create',
+                redirect: '/oauth/client/create/1',
+              },
+              {
+                path: '/oauth/client/create/1',
+                name: 'clientName',
+                component: './OAuth/Step1',
+              },
+              {
+                path: '/oauth/client/create/2',
+                name: 'clientDetails',
+                component: './OAuth/Step2',
+              },
+              {
+                path: '/oauth/client/create/3',
+                name: 'result',
+                component: './OAuth/Step3',
+              }
+            ],
           }
         ]
       },
