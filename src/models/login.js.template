@@ -4,7 +4,6 @@ import { fakeAccountLogin, getFakeCaptcha } from '@/services/api';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
 import { reloadAuthorized } from '@/utils/Authorized';
-import { postLogin } from '@/services/login';
 
 export default {
   namespace: 'login',
@@ -15,18 +14,14 @@ export default {
 
   effects: {
     *login({ payload }, { call, put }) {
-      const response = yield call(postLogin, payload);
-      // yield put({
-      //   type: 'changeLoginStatus',
-      //   payload: response,
-      // });
+      const response = yield call(fakeAccountLogin, payload);
+      yield put({
+        type: 'changeLoginStatus',
+        payload: response,
+      });
       // Login successfully
-      // if (response.status === 'ok') {
-      const { access_token } = response;
-      const success = !!access_token;
-
-      if (success) {
-        localStorage.setItem('access_token', access_token);
+      if (response.status === 'ok') {
+        reloadAuthorized();
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params;
