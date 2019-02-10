@@ -11,6 +11,7 @@ export default {
     addForm: {},
     checkData: {},
     addResult: {},
+    currentRecord: {},
   },
 
   effects: {
@@ -57,6 +58,12 @@ export default {
       const result = yield call(deleteClient, payload);
       if(callback) callback();      
     },
+    *setCurrent({ payload }, { put }) {
+      yield put({
+        type: 'saveCurrent',
+        payload,
+      })
+    },
   },
 
   reducers: {
@@ -85,6 +92,12 @@ export default {
       return {
         ...state,
         addResult: payload,
+      }
+    },
+    saveCurrent(state, { payload }) {
+      return {
+        ...state,
+        currentRecord: payload,
       }
     },
   }

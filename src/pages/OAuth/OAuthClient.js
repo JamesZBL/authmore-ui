@@ -76,6 +76,7 @@ class OAuthClient extends PureComponent {
     },
     {
       title: '令牌有效期',
+      width: 120,
       dataIndex: 'accessTokenValiditySeconds',
       render: val => {
         if (val < 60) return `${val} 秒`;
@@ -89,6 +90,7 @@ class OAuthClient extends PureComponent {
     },
     {
       title: '操作',
+      width: 120,
       render: (text, record) => (
         <Fragment>
           <a onClick={() => this.handleUpdateModalVisible(true, record)}>配置</a>
@@ -132,22 +134,39 @@ class OAuthClient extends PureComponent {
   }
 
   handleUpdateModalVisible = (visible, record) => {
+    const { dispatch } = this.props;
     this.setState({
       editModalVisible: !!visible,
-      currentRecord: record,
+    });
+    dispatch({
+      type: 'client/setCurrent',
+      payload: record,
     });
   }
 
-  handleUpdate = (modified) => {
+  updateClient = (modified) => {
     const { dispatch } = this.props;
     dispatch({
       type: 'client/update',
       payload: modified,
       callback: () => {
         this.handleUpdateModalVisible(false);
+        this.fetchClient();
         message.success('修改成功');
       }
-    })
+    });
+  }
+
+  handleUpdate = (modified) => {
+    Modal.confirm({
+      title: '修改应用',
+      content: `此操作将会影响线上所有客户端，确定修改吗？`,
+      okText: '确认',
+      cancelText: '取消',
+      onOk: () => {
+        this.updateClient(modified);
+      }
+    });
   }
 
   handleDelete = (record) => {
@@ -203,7 +222,7 @@ class OAuthClient extends PureComponent {
             />
           </div>
         </Card>
-        <EditClient visible={editModalVisible} record={currentRecord} {...methods} />
+        <EditClient visible={editModalVisible} {...methods} />
       </PageHeaderWrapper>
     );
   }

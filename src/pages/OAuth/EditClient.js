@@ -6,8 +6,9 @@ import { PureComponent } from "react";
 const { TextArea } = Input;
 const { Option } = Select;
 
-@connect(({ loading }) => ({
+@connect(({ client, loading }) => ({
   loading: loading.effects['client/update'],
+  record: client.currentRecord,
 }))
 @Form.create()
 class EditClient extends PureComponent {
@@ -27,14 +28,17 @@ class EditClient extends PureComponent {
     const onSubmit = () => {
       form.validateFields((err, values) => {
         if (!err) {
+          const { clientId } = recordForm;
+          values = { ...values, clientId };
           handleUpdate(values);
+          form.resetFields();
         }
       });
     };
     const onCancel = () => handleUpdateModalVisible(false);
 
     return (
-      <Modal visible={visible} onOk={onSubmit} onCancel={onCancel} title="修改应用信息" width={width}>
+      <Modal confirmLoading={loading} visible={visible} onOk={onSubmit} onCancel={onCancel} title="修改应用信息" width={width}>
         <Form layout="horizontal">
           <Form.Item label="应用名称" {...formItemLayout}>
             {getFieldDecorator('clientName', {
