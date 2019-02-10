@@ -41,6 +41,9 @@ class OAuthClient extends PureComponent {
     {
       title: '应用名称',
       dataIndex: 'clientName',
+      render: (clientName, record) => {
+        return clientName || record.clientId;
+      }
     },
     {
       title: '认证方式',

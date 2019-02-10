@@ -78,8 +78,16 @@ export default function request(url, option) {
     .update(fingerprint)
     .digest('hex');
 
+  const token = localStorage.getItem('access_token') || '';
+  const authorization = `Bearer ${token}`;
+
+  console.log(authorization);
+
   const defaultOptions = {
     credentials: 'include',
+    headers: {
+      'Authorization': authorization,
+    }
   };
   const newOptions = { ...defaultOptions, ...options };
   if (
@@ -88,12 +96,14 @@ export default function request(url, option) {
     newOptions.method === 'DELETE'
   ) {
     if (!(newOptions.body instanceof FormData)) {
+      if(newOptions && newOptions.headers && !(newOptions.headers['Content-Type'])) {
+        newOptions.body = JSON.stringify(newOptions.body);
+      }
       newOptions.headers = {
         Accept: 'application/json',
         'Content-Type': 'application/json; charset=utf-8',
         ...newOptions.headers,
       };
-      newOptions.body = JSON.stringify(newOptions.body);
     } else {
       // newOptions.body is FormData
       newOptions.headers = {

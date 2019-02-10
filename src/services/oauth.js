@@ -1,24 +1,23 @@
 import request from '@/utils/request';
 import { stringify } from 'qs';
-import { async } from 'q';
 
 export async function queryOAuthClient() {
-  return request('/api/client');
+  return request('/apis/client');
 }
 
 export async function addOAuthClient(params) {
-  return request('/api/client', {
+  return request('/apis/client', {
     method: 'POST',
     body: params,
   });
 }
 
 export async function queryClientNameExist(params) {
-  return request(`/api/client/exist?${stringify(params)}`);
+  return request(`/apis/client/exist?${stringify(params)}`);
 }
 
 export async function updateClient(params) {
-  return request('/api/client', {
+  return request('/apis/client', {
     method: 'PUT',
     body: params,
   });
@@ -26,7 +25,7 @@ export async function updateClient(params) {
 
 export async function deleteClient(params) {
   const { clientId } = params;
-  return request(`/api/client/${clientId}`, {
+  return request(`/apis/client/${clientId}`, {
     method: 'DELETE',
   });
 }
