@@ -1,6 +1,4 @@
-import { query as queryUsers, queryCurrent, queryAboutMe } from '@/services/user';
-
-const defaultAvatar = "https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png";
+import { query as queryUsers, queryCurrent } from '@/services/user';
 
 export default {
   namespace: 'user',
@@ -19,7 +17,7 @@ export default {
       });
     },
     *fetchCurrent(_, { call, put }) {
-      const response = yield call(queryAboutMe);
+      const response = yield call(queryCurrent);
       yield put({
         type: 'saveCurrentUser',
         payload: response,
@@ -34,12 +32,10 @@ export default {
         list: action.payload,
       };
     },
-    saveCurrentUser(state, { payload }) {
-      const { avatar } = payload;
-      payload.avatar = avatar || defaultAvatar;
+    saveCurrentUser(state, action) {
       return {
         ...state,
-        currentUser: payload || {},
+        currentUser: action.payload || {},
       };
     },
     changeNotifyCount(state, action) {

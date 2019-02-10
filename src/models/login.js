@@ -51,6 +51,7 @@ export default {
     },
 
     *logout(_, { put }) {
+      localStorage.removeItem('access_token');
       yield put({
         type: 'changeLoginStatus',
         payload: {
