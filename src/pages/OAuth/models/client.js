@@ -32,7 +32,7 @@ export default {
     *checkExistName({ payload }, { call, put }) {
       const response = yield call(queryClientNameExist, payload);
       const { result } = response;
-      if(!!result) {
+      if (!!result) {
         message.error('该名称已被占用');
         return;
       }
@@ -52,21 +52,28 @@ export default {
     },
     *update({ payload, callback }, { call }) {
       const result = yield call(updateClient, payload);
-      if(callback) callback();
+      console.log(result);
+      if (result.msg == 'success' && callback) callback();
     },
     *delete({ payload, callback }, { call }) {
       const result = yield call(deleteClient, payload);
-      if(callback) callback();      
+      if (result.msg == 'success' && callback) callback();
     },
     *setCurrent({ payload }, { put }) {
       const { authorities } = payload;
-      const formatted = authorities.map( a => a.authority );
+      const formatted = authorities.map(a => a.authority);
       payload = { ...payload, authorities: formatted };
       yield put({
         type: 'saveCurrent',
         payload,
-      })
+      });
     },
+    *resetCurrent(a ,{ put }) {
+      yield put({
+        type: 'resetCurrent',
+        payload: {},
+      });
+    }
   },
 
   reducers: {
@@ -101,6 +108,12 @@ export default {
       return {
         ...state,
         currentRecord: payload,
+      }
+    },
+    resetCurrent(state) {
+      return {
+        ...state,
+        currentRecord: {},
       }
     },
   }

@@ -1,4 +1,4 @@
-import { PureComponent, Fragment } from "react";
+import { PureComponent, Fragment, Component } from "react";
 import { Form, Input, Button, Alert, Divider, InputNumber, Radio, Select, Modal, Card, message } from "antd";
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import { authTypes } from './OAuthClient';
@@ -18,11 +18,6 @@ class EditClient extends PureComponent {
   componentDidMount() {
     const { recordForm } = this.props;
     if (!recordForm.clientId) router.push('/');
-  }
-
-  componentWillUnmount() {
-    const { form } = this.props;
-    form.resetFields();
   }
 
   onSubmit = () => {
@@ -62,7 +57,7 @@ class EditClient extends PureComponent {
     });
   }
 
-  onPrev() {
+  onPrev = () => {
     router.push('/oauth/client/index');
   }
 
@@ -79,10 +74,7 @@ class EditClient extends PureComponent {
       },
     };
     return (
-      <PageHeaderWrapper
-        title={recordForm.clientName || recordForm.clientId}
-        tabActiveKey={location.pathname}
-      >
+      <PageHeaderWrapper title={recordForm.clientName || recordForm.clientId}>
         <Card bordered={false}>
           <Fragment>
             <Form layout="horizontal" className={styles.stepForm}>
