@@ -56,7 +56,13 @@ export default [
                 component: './OAuth/Step3',
               }
             ],
-          }
+          },
+          {
+            path: '/oauth/client/edit',
+            name: 'edit_client',
+            component: './OAuth/EditClient',
+            // hideInMenu: true,
+          },
         ]
       },
       {

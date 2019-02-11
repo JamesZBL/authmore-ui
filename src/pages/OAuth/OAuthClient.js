@@ -93,7 +93,7 @@ class OAuthClient extends PureComponent {
       width: 120,
       render: (text, record) => (
         <Fragment>
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>配置</a>
+          <a onClick={() => this.handleEdit(record)}>配置</a>
           <Divider type="vertical" />
           <a onClick={() => this.handleDelete(record)}>删除</a>
         </Fragment>
@@ -133,42 +133,15 @@ class OAuthClient extends PureComponent {
     router.push('/oauth/client/create');
   }
 
-  handleUpdateModalVisible = (visible, record) => {
+  handleEdit = (record) => {
     const { dispatch } = this.props;
-    this.setState({
-      editModalVisible: !!visible,
-    });
     dispatch({
       type: 'client/setCurrent',
       payload: record,
     });
+    router.push('/oauth/client/edit');
   }
-
-  updateClient = (modified) => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'client/update',
-      payload: modified,
-      callback: () => {
-        this.handleUpdateModalVisible(false);
-        this.fetchClient();
-        message.success('修改成功');
-      }
-    });
-  }
-
-  handleUpdate = (modified) => {
-    Modal.confirm({
-      title: '修改应用',
-      content: `此操作将会影响线上所有客户端，确定修改吗？`,
-      okText: '确认',
-      cancelText: '取消',
-      onOk: () => {
-        this.updateClient(modified);
-      }
-    });
-  }
-
+  
   handleDelete = (record) => {
     const { clientId, clientName } = record;
     // ...
@@ -189,6 +162,7 @@ class OAuthClient extends PureComponent {
       type: 'client/delete',
       payload: client,
       callback: () => {
+        message.success('删除成功');
         this.fetchClient();
       },
     });
@@ -222,7 +196,6 @@ class OAuthClient extends PureComponent {
             />
           </div>
         </Card>
-        <EditClient visible={editModalVisible} {...methods} />
       </PageHeaderWrapper>
     );
   }

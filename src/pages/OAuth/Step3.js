@@ -9,6 +9,12 @@ import styles from '@/pages/Forms/StepForm/style.less';
   addResult: client.addResult,
 }))
 class Step3 extends React.PureComponent {
+
+  componentDidMount() {
+    const { addResult } = this.props;
+    if(!addResult.clientId) router.push('/');
+  }
+
   render() {
     const { addResult } = this.props;
     const onFinish = (flag) => {

@@ -59,6 +59,9 @@ export default {
       if(callback) callback();      
     },
     *setCurrent({ payload }, { put }) {
+      const { authorities } = payload;
+      const formatted = authorities.map( a => a.authority );
+      payload = { ...payload, authorities: formatted };
       yield put({
         type: 'saveCurrent',
         payload,

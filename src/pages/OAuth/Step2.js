@@ -25,6 +25,12 @@ const formItemLayout = {
 }))
 @Form.create()
 class Step2 extends React.PureComponent {
+
+  componentDidMount() {
+    const { addForm } = this.props;
+    if(!addForm.clientName) router.push('/');
+  }
+
   render() {
     const { form, dispatch, submitting, addForm } = this.props;
     const { getFieldDecorator, validateFields } = form;
