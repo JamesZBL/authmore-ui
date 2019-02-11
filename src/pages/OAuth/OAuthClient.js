@@ -112,7 +112,7 @@ class OAuthClient extends PureComponent {
     return result;
   }
 
-  fetchClient() {
+  fetchClient = () => {
     const { dispatch } = this.props;
     dispatch({
       type: 'client/fetch',
@@ -141,7 +141,7 @@ class OAuthClient extends PureComponent {
     });
     router.push('/oauth/client/edit');
   }
-  
+
   handleDelete = (record) => {
     const { clientId, clientName } = record;
     // ...
@@ -155,7 +155,7 @@ class OAuthClient extends PureComponent {
       }
     });
   }
-  
+
   deleteClient = (client) => {
     const { dispatch } = this.props;
     dispatch({

@@ -52,7 +52,6 @@ export default {
     },
     *update({ payload, callback }, { call }) {
       const result = yield call(updateClient, payload);
-      console.log(result);
       if (result.msg == 'success' && callback) callback();
     },
     *delete({ payload, callback }, { call }) {
