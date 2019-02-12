@@ -17,14 +17,27 @@ class EditUser extends PureComponent {
 
   componentDidMount() {
     const { recordForm } = this.props;
-    console.log(recordForm);
     if (!recordForm || !recordForm.id) router.push('/ouser/user/index');
+  }
+
+  canModify = (form) => {
+    const { _username, authorities } = form;
+    if (_username === 'james') {
+      console.log(form);
+      if (authorities && !authorities.includes('SA') || !authorities) {
+        message.error('这个用户不能没有 SA 权限');
+        return false;
+      }
+    }
+    return true;
   }
 
   onSubmit = () => {
     const { form, recordForm } = this.props;
     form.validateFields((err, values) => {
       if (!err) {
+        if (!this.canModify(values))
+          return;
         const { id } = recordForm;
         const { _username, _password, authorities } = values;
         const form = {
@@ -106,10 +119,10 @@ class EditUser extends PureComponent {
               </Form.Item>
               <Form.Item {...formItemLayout} label="密码">
                 {getFieldDecorator('_password')
-                (<Input.Password placeholder="新用户的密码，如无需修改请留空" />)}
+                  (<Input.Password placeholder="请输入新密码，如无需修改请留空" maxLength={32} />)}
               </Form.Item>
               <Form.Item {...formItemLayout} label="权限标识">
-                {getFieldDecorator('authorities', {initialValue: authorities})
+                {getFieldDecorator('authorities', { initialValue: authorities })
                   (<Select mode="tags" placeholder="可填写多项" />)}
               </Form.Item>
               <Form.Item

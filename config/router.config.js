@@ -61,7 +61,7 @@ export default [
             path: '/oauth/client/edit',
             name: 'edit_client',
             component: './OAuth/EditClient',
-            // hideInMenu: true,
+            hideInMenu: true,
           },
         ]
       },
@@ -87,6 +87,7 @@ export default [
             path: '/ouser/user/edit',
             name: 'edit_user',
             component: './OAuth/EditUser',
+            hideInMenu: true,
           },
         ]
       },

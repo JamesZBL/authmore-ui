@@ -1,5 +1,5 @@
 import React, { Component, PureComponent, Fragment } from "react";
-import { Card, Form, Tag, Badge, Modal, Button, Input, Divider, Switch, Icon, message } from "antd";
+import { Card, Form, Tag, Badge, Modal, Button, Input, Divider, Switch, Icon, message, Tooltip } from "antd";
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import { connect } from "dva";
 import StandardTable from "@/components/StandardTable";
@@ -97,6 +97,12 @@ class OAuthUser extends PureComponent {
     router.push('/ouser/user/edit');
   };
 
+  canModify = (record) => {
+    if (record && record.username === 'james')
+      return false;
+    return true;
+  }
+
   rowKey = 'id';
   title = 'OAuth 认证系统用户';
 
@@ -130,23 +136,36 @@ class OAuthUser extends PureComponent {
       dataIndex: 'enabled',
       render: (enabled, record) => {
         const { onSwitchChange } = this;
+        const disabled = !this.canModify(record);
         let status = {};
         if (enabled) status = { defaultChecked: true };
-        return <Switch onChange={() => onSwitchChange(record)}
-          checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="close" />}
-          {...status} loading={this.props.switchLoading} />;
+        status = { ...status, disabled };
+        let title = undefined;
+        if (disabled) title = '这个用户不能停用哦';
+        return (
+          <Tooltip title={title}>
+            <Switch onChange={() => onSwitchChange(record)}
+              checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="close" />}
+              {...status} loading={this.props.switchLoading} />
+          </Tooltip>
+        )
       }
     },
     {
       title: '操作',
       width: 120,
-      render: (text, record) => (
-        <Fragment>
-          <a onClick={() => this.handleEdit(record)}>配置</a>
-          <Divider type="vertical" />
-          <a onClick={() => this.handleDelete(record)}>删除</a>
-        </Fragment>
-      ),
+      render: (text, record) => {
+        let onClick = () => this.handleDelete(record);
+        const canModify = this.canModify(record);
+        if (!canModify) onClick = () => { message.warn('这个用户不能删除哦')};
+        return (
+          <Fragment>
+            <a onClick={() => this.handleEdit(record)}>配置</a>
+            <Divider type="vertical" />
+            <a onClick={onClick}>删除</a>
+          </Fragment>
+        )
+      },
     },
   ];
 

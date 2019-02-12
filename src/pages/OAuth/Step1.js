@@ -39,9 +39,9 @@ class Step1 extends React.PureComponent {
           <Form.Item {...formItemLayout} label="应用名称">
             {getFieldDecorator('clientName', {
               rules: [{ required: true, message: '请输入应用名称' }],
-            })(<Input placeholder="请输入应用名称" />)}
+            })(<Input placeholder="请输入应用名称" maxLength={15}/>)}
           </Form.Item>
-        
+
           <Form.Item
             wrapperCol={{
               xs: { span: 24, offset: 0 },
@@ -50,8 +50,7 @@ class Step1 extends React.PureComponent {
                 offset: formItemLayout.labelCol.span,
               },
             }}
-            label=""
-          >
+            label="">
             <Button type="primary" onClick={onValidateForm} loading={checking}>
               下一步
             </Button>

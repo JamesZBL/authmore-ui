@@ -82,7 +82,7 @@ class AddUser extends React.PureComponent {
                     required: true,
                     message: '就这一个名字，不能再少了'
                   }]
-                })(<Input placeholder="请输入用户名" />)}
+                })(<Input placeholder="请输入用户名" maxLength={15}/>)}
               </Form.Item>
               <Form.Item {...formItemLayout} label="密码">
                 <Tooltip placement="right" title="自动生成的随机密码，可任意修改">
@@ -92,7 +92,7 @@ class AddUser extends React.PureComponent {
                       required: true,
                       message: '就这一个密码，不能再少了'
                     }]
-                  })(<Input.Password placeholder="新用户的密码" />)}
+                  })(<Input.Password placeholder="新用户的密码" maxLength={32}/>)}
                 </Tooltip>
               </Form.Item>
               <Form.Item {...formItemLayout} label="权限标识">
