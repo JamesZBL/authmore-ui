@@ -56,7 +56,8 @@ class OAuthUser extends PureComponent {
       payload: form,
       callback: () => {
         const msg = record.enabled ? '该用户已暂时停用' : '该用户已成功启用';
-        message.success(`${msg}`);
+        const call = record.enabled ? message.warn : message.success;
+        call(`${msg}`);
         this.fetchUsers();
       },
     })

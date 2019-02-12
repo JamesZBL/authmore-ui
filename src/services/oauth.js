@@ -59,3 +59,7 @@ export async function deleteUser(params) {
     method: 'DELETE',
   });
 }
+
+export async function queryUserNameExist(params) {
+  return request(`/apis/user/exist?${stringify(params)}`);
+}

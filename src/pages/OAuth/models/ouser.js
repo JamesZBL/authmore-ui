@@ -1,4 +1,5 @@
-import { fetchUsers, updateUser, fetchRandomPwd, postUser, deleteUser } from '@/services/oauth';
+import { fetchUsers, updateUser, fetchRandomPwd, postUser, deleteUser, queryUserNameExist } from '@/services/oauth';
+import { message } from 'antd';
 
 export default {
   namespace: 'ouser',
@@ -37,6 +38,14 @@ export default {
     },
     *add({ callback, payload }, { call }) {
       const { _username, _password } = payload;
+      const exist = yield call (queryUserNameExist, {
+        username: _username,
+      });
+      const { result } = exist;
+      if(result) {
+        message.error('这个名字已经被占用了');
+        return;
+      } 
       const res = yield call(postUser, {
         ...payload,
         username: _username,
