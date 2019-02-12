@@ -1,4 +1,4 @@
-import { queryOAuthClient, addOAuthClient, queryClientNameExist, updateClient, deleteClient } from '@/services/oauth';
+import { queryOAuthClient, addOAuthClient, queryClientNameExist, updateClient, deleteClient, batchDeleteClient } from '@/services/oauth';
 import { message } from 'antd';
 import { routerRedux } from 'dva/router';
 import { platform } from 'os';
@@ -52,11 +52,11 @@ export default {
     },
     *update({ payload, callback }, { call }) {
       const result = yield call(updateClient, payload);
-      if (result.msg == 'success' && callback) callback();
+      if (result.msg === 'success' && callback) callback();
     },
     *delete({ payload, callback }, { call }) {
       const result = yield call(deleteClient, payload);
-      if (result.msg == 'success' && callback) callback();
+      if (result.msg === 'success' && callback) callback();
     },
     *setCurrent({ payload }, { put }) {
       const { authorities } = payload;
@@ -72,7 +72,11 @@ export default {
         type: 'resetCurrent',
         payload: {},
       });
-    }
+    },
+    *batchDelete({ payload, callback }, { call }) {
+      const result = yield call(batchDeleteClient, payload);
+      if (result.msg === 'success' && callback) callback();
+    },
   },
 
   reducers: {

@@ -31,6 +31,13 @@ export async function deleteClient(params) {
   });
 }
 
+export async function batchDeleteClient(params) {
+  return request('/apis/client', {
+    method: 'DELETE',
+    body: params,
+  });
+}
+
 export async function fetchUsers() {
   return request('/apis/user');
 }
@@ -62,4 +69,11 @@ export async function deleteUser(params) {
 
 export async function queryUserNameExist(params) {
   return request(`/apis/user/exist?${stringify(params)}`);
+}
+
+export async function batchDeleteUser(params) {
+  return request('/apis/user', {
+    method: 'DELETE',
+    body: params,
+  });
 }

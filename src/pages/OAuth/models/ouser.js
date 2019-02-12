@@ -1,4 +1,12 @@
-import { fetchUsers, updateUser, fetchRandomPwd, postUser, deleteUser, queryUserNameExist } from '@/services/oauth';
+import {
+  fetchUsers,
+  updateUser,
+  fetchRandomPwd,
+  postUser,
+  deleteUser,
+  queryUserNameExist,
+  batchDeleteUser
+} from '@/services/oauth';
 import { message } from 'antd';
 
 export default {
@@ -34,31 +42,31 @@ export default {
         type: 'savePwd',
         payload: result,
       });
-      if(result && callback) callback(result);
+      if (result && callback) callback(result);
     },
     *add({ callback, payload }, { call }) {
       const { _username, _password } = payload;
-      const exist = yield call (queryUserNameExist, {
+      const exist = yield call(queryUserNameExist, {
         username: _username,
       });
       const { result } = exist;
-      if(result) {
+      if (result) {
         message.error('这个名字已经被占用了');
         return;
-      } 
+      }
       const res = yield call(postUser, {
         ...payload,
         username: _username,
         password: _password,
       });
-      if (res.msg == 'success' && callback) callback();
+      if (res.msg === 'success' && callback) callback();
     },
     *delete({ callback, payload }, { call }) {
       const res = yield call(deleteUser, payload);
-      if (res.msg == 'success' && callback) callback();
+      if (res.msg === 'success' && callback) callback();
     },
     *setCurrent({ payload }, { put }) {
-      const form = { 
+      const form = {
         ...payload,
         authorities: payload.authorities.map(a => a.authority),
       };
@@ -66,6 +74,10 @@ export default {
         type: 'saveCurrent',
         payload: form,
       });
+    },
+    *batchDelete({ callback, payload }, { call }) {
+      const res = yield call(batchDeleteUser, payload);
+      if (res.msg === 'success' && callback) callback();
     },
   },
 
@@ -87,7 +99,7 @@ export default {
     },
     saveCurrent(state, { payload }) {
       return {
-        ...state, 
+        ...state,
         current: payload,
       }
     },

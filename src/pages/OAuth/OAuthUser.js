@@ -37,13 +37,6 @@ class OAuthUser extends PureComponent {
     });
   }
 
-
-  handleSelectRows = rows => {
-    this.setState({
-      selectedRows: rows,
-    });
-  };
-
   handleAddUser = () => {
     router.push('/ouser/user/create');
   };
@@ -99,10 +92,52 @@ class OAuthUser extends PureComponent {
   };
 
   canModify = (record) => {
-    if (record && record.username === 'james')
+    if (record && ['rob', 'tom', 'james'].includes(record.username))
       return false;
     return true;
   }
+
+  rowSelection = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      this.setState({
+        selectedRows: selectedRows,
+      });
+    },
+    getCheckboxProps: record => ({
+      disabled: !this.canModify(record),
+    }),
+  };
+
+  handleBatchDelete = () => {
+    const { selectedRows } = this.state;
+    const count = selectedRows.length;
+    const usernames = selectedRows.map(r => r.username).join('、');
+    Modal.confirm({
+      title: '删除用户',
+      content: `确定删除 ${usernames} 这${count < 2 ? '' : ' ' + count + ' '}个用户吗？`,
+      okText: '确认',
+      cancelText: '取消',
+      onOk: () => {
+        this.batchDelete(selectedRows);
+      },
+    });
+  };
+
+  batchDelete = (rows) => {
+    const ids = rows.map(r => r.id);
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'ouser/batchDelete',
+      payload: ids,
+      callback: () => {
+        message.success('删除成功');
+        this.fetchUsers();
+        this.setState({
+          selectedRows: [],
+        });
+      }
+    });
+  };
 
   rowKey = 'id';
   title = 'OAuth 认证系统用户';
@@ -158,7 +193,7 @@ class OAuthUser extends PureComponent {
       render: (text, record) => {
         let onClick = () => this.handleDelete(record);
         const canModify = this.canModify(record);
-        if (!canModify) onClick = () => { message.warn('这个用户不能删除哦')};
+        if (!canModify) onClick = () => { message.warn('这个用户不能删除哦') };
         return (
           <Fragment>
             <a onClick={() => this.handleEdit(record)}>配置</a>
@@ -182,13 +217,18 @@ class OAuthUser extends PureComponent {
               <Button icon="user-add" type="primary" onClick={this.handleAddUser}>
                 创建一个用户
               </Button>
+              {selectedRows.length > 0 && (
+                <span>
+                  <Button onClick={this.handleBatchDelete}>批量删除</Button>
+                </span>
+              )}
             </div>
             <StandardTable
+              rowSelection={this.rowSelection}
               selectedRows={selectedRows}
               loading={loading}
               data={data}
               columns={this.columns}
-              onSelectRow={this.handleSelectRows}
               rowKey={this.rowKey}
             />
           </div>

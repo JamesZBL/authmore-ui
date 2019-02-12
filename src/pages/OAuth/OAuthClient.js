@@ -167,6 +167,37 @@ class OAuthClient extends PureComponent {
     });
   }
 
+  handleBatchDelete = () => {
+    const { selectedRows } = this.state;
+    const count = selectedRows.length;
+    const clientNames = selectedRows.map(r => r.clientName).join('、');
+    Modal.confirm({
+      title: '删除应用',
+      content: `确定删除 ${clientNames} 这${count < 2 ? '' : ' ' + count + ' '}个应用吗？`,
+      okText: '确认',
+      cancelText: '取消',
+      onOk: () => {
+        this.batchDelete(selectedRows);
+      },
+    });
+  };
+
+  batchDelete = (rows) => {
+    const ids = rows.map(r => r.clientId);
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'client/batchDelete',
+      payload: ids,
+      callback: () => {
+        message.success('删除成功');
+        this.fetchClient();
+        this.setState({
+          selectedRows: [],
+        });
+      }
+    });
+  };
+
   render() {
     const {
       client: { data },
@@ -184,6 +215,11 @@ class OAuthClient extends PureComponent {
               <Button icon="plus" type="primary" onClick={() => this.handleClickAddClient()}>
                 创建一个应用
               </Button>
+              {selectedRows.length > 0 && (
+                <span>
+                  <Button onClick={this.handleBatchDelete}>批量删除</Button>
+                </span>
+              )}
             </div>
             <StandardTable
               selectedRows={selectedRows}
