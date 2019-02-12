@@ -22,7 +22,7 @@ export default [
       {
         path: '/oauth',
         name: 'oauth',
-        icon: 'dashboard',
+        icon: 'safety-certificate',
         routes: [
           { path: '/oauth/client', redirect: '/oauth/client/index' },
           {
@@ -62,6 +62,31 @@ export default [
             name: 'edit_client',
             component: './OAuth/EditClient',
             // hideInMenu: true,
+          },
+        ]
+      },
+      {
+        path: '/ouser',
+        name: 'ouser',
+        icon: 'user',
+        routes: [
+          {
+            path: '/ouser/user', redirect: '/ouser/user/index',
+          },
+          {
+            path: '/ouser/user/index',
+            name: 'user',
+            component: './OAuth/OAuthUser',
+          },
+          {
+            path: '/ouser/user/create',
+            name: 'create_user',
+            component: './OAuth/AddUser',
+          },
+          {
+            path: '/ouser/user/edit',
+            name: 'edit_user',
+            component: './OAuth/EditUser',
           },
         ]
       },

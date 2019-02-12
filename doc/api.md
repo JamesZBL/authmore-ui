@@ -164,7 +164,14 @@ DELETE  /user/{user_id}
 /user/5c5ba57ca4ca76380cea0a71
 ```
 
+## Password
 
+GET    /password/random
+```json
+{
+    "result": "xxxxxxxxxxxxxx"
+}
+```
 
 
 ## 修改记录

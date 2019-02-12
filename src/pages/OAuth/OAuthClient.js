@@ -30,12 +30,11 @@ class OAuthClient extends PureComponent {
 
   state = {
     selectedRows: [],
-    editModalVisible: false,
     currentRecord: {},
   };
 
   rowKey = 'clientId';
-  title = '应用管理';
+  title = 'OAuth 认证应用管理';
 
   columns = [
     {
@@ -183,7 +182,7 @@ class OAuthClient extends PureComponent {
           <div className={tableStyles.tableList}>
             <div className={tableStyles.tableListOperator}>
               <Button icon="plus" type="primary" onClick={() => this.handleClickAddClient()}>
-                创建应用
+                创建一个应用
               </Button>
             </div>
             <StandardTable
