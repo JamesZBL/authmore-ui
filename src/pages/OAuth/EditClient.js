@@ -10,15 +10,26 @@ const { Option } = Select;
 
 @connect(({ client, loading }) => ({
   recordForm: client.currentRecord,
+  scoped: client.currentRecord.scoped,
   submitting: loading.effects['client/update'],
 }))
 @Form.create()
 class EditClient extends PureComponent {
 
+  state = {
+    scoped: this.props.scoped,
+  };
+
   componentDidMount() {
     const { recordForm } = this.props;
     if (!recordForm.clientId) router.push('/');
   }
+
+  handleScopedChange = ({ target: { value } }) => {
+    this.setState({
+      scoped: value,
+    });
+  };
 
   onSubmit = () => {
     const { form, recordForm } = this.props;
@@ -148,18 +159,32 @@ class EditClient extends PureComponent {
                 <span className="ant-form-text">秒</span>
               </Form.Item>
               {/* 作用域 */}
-              <Form.Item {...formItemLayout} label="作用域标识">
-                {getFieldDecorator('scope', { initialValue: recordForm.scope })
-                  (<Select mode="tags" placeholder="例如：READ,WRITE" />)}
-              </Form.Item>
+              {this.state.scoped && (
+                <Form.Item {...formItemLayout} label="访问范围">
+                  {getFieldDecorator('scope', {
+                    initialValue: recordForm.scope,
+                  })(<Select mode="tags" placeholder="例如：AVATAR,PROFILE" />)}
+                </Form.Item>
+              )}
               {/* 是否限制作用域 */}
-              <Form.Item {...formItemLayout} label="是否限制作用域">
+              <Form.Item {...formItemLayout} label="限制访问范围">
                 {getFieldDecorator('scoped', {
                   initialValue: recordForm.scoped,
                 })(
-                  <Radio.Group>
+                  <Radio.Group onChange={this.handleScopedChange}>
                     <Radio value={false}>不限制</Radio>
                     <Radio value={true}>限制</Radio>
+                  </Radio.Group>
+                )}
+              </Form.Item>
+              {/* 自动确认授权 */}
+              <Form.Item {...formItemLayout} label="自动授权">
+                {getFieldDecorator('isAutoApprove', {
+                  initialValue: recordForm.autoApprove,
+                })(
+                  <Radio.Group>
+                    <Radio value={true}>登录后自动授权</Radio>
+                    <Radio value={false}>提示后手动确认授权</Radio>
                   </Radio.Group>
                 )}
               </Form.Item>

@@ -10,16 +10,16 @@ import EditClient from './EditClient';
 const FormItem = Form.Item;
 
 export const authTypes = {
-  'password': '密码模式',
   'authorization_code': '授权码模式',
-  'implicit': '简化模式',
+  'password': '密码模式',
   'client_credentials': '客户端密钥模式',
+  'implicit': '简化模式',
 };
 const authTypeColorMap = {
-  'password': 'green',
   'authorization_code': 'blue',
-  'implicit': 'orange',
+  'password': 'green',
   'client_credentials': 'purple',
+  'implicit': 'orange',
 }
 
 @connect(({ client, loading }) => ({
