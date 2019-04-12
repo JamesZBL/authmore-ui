@@ -14,12 +14,14 @@ export const authTypes = {
   'password': '密码模式',
   'client_credentials': '客户端密钥模式',
   'implicit': '简化模式',
+  'refresh_token': '刷新令牌',
 };
 const authTypeColorMap = {
   'authorization_code': 'blue',
   'password': 'green',
   'client_credentials': 'purple',
   'implicit': 'orange',
+  'refresh_token': 'blue',
 }
 
 @connect(({ client, loading }) => ({
