@@ -6,6 +6,7 @@ import StandardTable from "@/components/StandardTable";
 import tableStyles from '@/pages/List/TableList.less';
 import router from 'umi/router';
 import EditClient from './EditClient';
+import { RootAppId } from '@/oauth';
 
 const FormItem = Form.Item;
 
@@ -92,13 +93,18 @@ class OAuthClient extends PureComponent {
     {
       title: '操作',
       width: 120,
-      render: (text, record) => (
-        <Fragment>
-          <a onClick={() => this.handleEdit(record)}>配置</a>
-          <Divider type="vertical" />
-          <a onClick={() => this.handleDelete(record)}>删除</a>
-        </Fragment>
-      ),
+      render: (text, record) => {
+        let onClick = () => this.handleDelete(record);
+        const canModify = this.canModify(record);
+        if (!canModify) onClick = () => { message.warn('这个应用不能删除哦') };
+        return (
+          <Fragment>
+            <a onClick={() => this.handleEdit(record)}>配置</a>
+            <Divider type="vertical" />
+            <a onClick={onClick}>删除</a>
+          </Fragment>
+        )
+      },
     },
   ];
 
@@ -200,6 +206,23 @@ class OAuthClient extends PureComponent {
     });
   };
 
+  canModify = (record) => {
+    if (record && [RootAppId].includes(record.clientId))
+      return false;
+    return true;
+  };
+
+  rowSelection = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      this.setState({
+        selectedRows: selectedRows,
+      });
+    },
+    getCheckboxProps: record => ({
+      disabled: !this.canModify(record),
+    }),
+  };
+
   render() {
     const {
       client: { data },
@@ -224,6 +247,7 @@ class OAuthClient extends PureComponent {
               )}
             </div>
             <StandardTable
+              rowSelection={this.rowSelection}
               selectedRows={selectedRows}
               loading={loading}
               data={data}
