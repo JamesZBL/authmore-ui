@@ -231,7 +231,6 @@ class OAuthClient extends PureComponent {
     const { selectedRows, editModalVisible, currentRecord } = this.state;
     const { handleUpdateModalVisible, handleUpdate } = this;
     const methods = { handleUpdateModalVisible, handleUpdate };
-
     return (
       <PageHeaderWrapper title={this.title}>
         <Card bordered={false}>

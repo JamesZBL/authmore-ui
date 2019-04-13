@@ -91,19 +91,6 @@ export default class GlobalHeaderRight extends PureComponent {
     } = this.props;
     const menu = (
       <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
-        <Menu.Item key="userCenter">
-          <Icon type="user" />
-          <FormattedMessage id="menu.account.center" defaultMessage="account center" />
-        </Menu.Item>
-        <Menu.Item key="userinfo">
-          <Icon type="setting" />
-          <FormattedMessage id="menu.account.settings" defaultMessage="account settings" />
-        </Menu.Item>
-        <Menu.Item key="triggerError">
-          <Icon type="close-circle" />
-          <FormattedMessage id="menu.account.trigger" defaultMessage="Trigger Error" />
-        </Menu.Item>
-        <Menu.Divider />
         <Menu.Item key="logout">
           <Icon type="logout" />
           <FormattedMessage id="menu.account.logout" defaultMessage="logout" />
@@ -148,53 +135,6 @@ export default class GlobalHeaderRight extends PureComponent {
             <Icon type="question-circle-o" />
           </a>
         </Tooltip>
-        <NoticeIcon
-          className={styles.action}
-          count={currentUser.unreadCount}
-          onItemClick={(item, tabProps) => {
-            console.log(item, tabProps); // eslint-disable-line
-            this.changeReadState(item, tabProps);
-          }}
-          locale={{
-            emptyText: formatMessage({ id: 'component.noticeIcon.empty' }),
-            clear: formatMessage({ id: 'component.noticeIcon.clear' }),
-            loadedAll: formatMessage({ id: 'component.noticeIcon.loaded' }),
-            loadMore: formatMessage({ id: 'component.noticeIcon.loading-more' }),
-          }}
-          onClear={onNoticeClear}
-          onLoadMore={this.fetchMoreNotices}
-          onPopupVisibleChange={onNoticeVisibleChange}
-          loading={fetchingNotices}
-          clearClose
-        >
-          <NoticeIcon.Tab
-            count={unreadMsg.notification}
-            list={noticeData.notification}
-            title={formatMessage({ id: 'component.globalHeader.notification' })}
-            name="notification"
-            emptyText={formatMessage({ id: 'component.globalHeader.notification.empty' })}
-            emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
-            {...loadMoreProps}
-          />
-          <NoticeIcon.Tab
-            count={unreadMsg.message}
-            list={noticeData.message}
-            title={formatMessage({ id: 'component.globalHeader.message' })}
-            name="message"
-            emptyText={formatMessage({ id: 'component.globalHeader.message.empty' })}
-            emptyImage="https://gw.alipayobjects.com/zos/rmsportal/sAuJeJzSKbUmHfBQRzmZ.svg"
-            {...loadMoreProps}
-          />
-          <NoticeIcon.Tab
-            count={unreadMsg.event}
-            list={noticeData.event}
-            title={formatMessage({ id: 'component.globalHeader.event' })}
-            name="event"
-            emptyText={formatMessage({ id: 'component.globalHeader.event.empty' })}
-            emptyImage="https://gw.alipayobjects.com/zos/rmsportal/HsIsxMZiWKrNUavQUXqx.svg"
-            {...loadMoreProps}
-          />
-        </NoticeIcon>
         {currentUser.name ? (
           <HeaderDropdown overlay={menu}>
             <span className={`${styles.action} ${styles.account}`}>
