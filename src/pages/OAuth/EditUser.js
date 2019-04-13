@@ -22,7 +22,7 @@ class EditUser extends PureComponent {
 
   canModify = (form) => {
     const { _username, authorities } = form;
-    if (_username === 'james') {
+    if (_username === 'root') {
       console.log(form);
       if (authorities && !authorities.includes('SA') || !authorities) {
         message.error('这个用户不能没有 SA 权限');

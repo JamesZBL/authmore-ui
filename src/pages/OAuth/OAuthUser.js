@@ -92,7 +92,7 @@ class OAuthUser extends PureComponent {
   };
 
   canModify = (record) => {
-    if (record && ['rob', 'tom', 'james'].includes(record.username))
+    if (record && ['root'].includes(record.username))
       return false;
     return true;
   }

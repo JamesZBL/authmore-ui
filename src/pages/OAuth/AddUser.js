@@ -82,7 +82,7 @@ class AddUser extends React.PureComponent {
                     required: true,
                     message: '就这一个名字，不能再少了'
                   }]
-                })(<Input placeholder="请输入用户名" maxLength={15}/>)}
+                })(<Input placeholder="请输入用户名" maxLength={15} />)}
               </Form.Item>
               <Form.Item {...formItemLayout} label="密码">
                 <Tooltip placement="right" title="自动生成的随机密码，可任意修改">
@@ -92,7 +92,7 @@ class AddUser extends React.PureComponent {
                       required: true,
                       message: '就这一个密码，不能再少了'
                     }]
-                  })(<Input.Password placeholder="新用户的密码" maxLength={32}/>)}
+                  })(<Input.Password placeholder="新用户的密码" maxLength={32} />)}
                 </Tooltip>
               </Form.Item>
               <Form.Item {...formItemLayout} label="权限标识">
@@ -118,14 +118,9 @@ class AddUser extends React.PureComponent {
             <Divider style={{ margin: '40px 0 24px' }} />
             <div className={styles.desc}>
               <h3>说明</h3>
-              <h4>转账到支付宝账户</h4>
-              <p>
-                如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。
-              </p>
-              <h4>转账到银行卡</h4>
-              <p>
-                如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。
-              </p>
+              <p>这里添加的用户既可以是管理平台的管理员，也可以是 OAuth 协议四个主体（认证中心、资源服务、客户端、用户）中的用户</p>
+              <p>若资源服务有用户注册功能，也可以访问 Authmore 提供的 Web API 进行用户数据的录入</p>
+              <p>若添加的用户为平台管理员，则必须添加 SA 权限，普通用户根据资源服务具体功能需求而定</p>
             </div>
           </Fragment>
         </Card>

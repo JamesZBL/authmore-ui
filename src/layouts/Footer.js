@@ -20,9 +20,9 @@ const FooterView = () => (
           blankTarget: true,
         },
         {
-          key: 'Ant Design',
-          title: 'Ant Design',
-          href: 'https://ant.design',
+          key: 'gitee',
+          title: 'Gitee',
+          href: 'https://gitee.com/zbl1996/authmore',
           blankTarget: true,
         },
       ]}
