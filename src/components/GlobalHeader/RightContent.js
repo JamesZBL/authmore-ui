@@ -8,6 +8,7 @@ import HeaderSearch from '../HeaderSearch';
 import HeaderDropdown from '../HeaderDropdown';
 import SelectLang from '../SelectLang';
 import styles from './index.less';
+import { docLink } from '@/config';
 
 export default class GlobalHeaderRight extends PureComponent {
   getNoticeData() {
@@ -128,7 +129,7 @@ export default class GlobalHeaderRight extends PureComponent {
         <Tooltip title={formatMessage({ id: 'component.globalHeader.help' })}>
           <a
             target="_blank"
-            href="https://pro.ant.design/docs/getting-started"
+            href={docLink}
             rel="noopener noreferrer"
             className={styles.action}
           >

@@ -28,7 +28,7 @@ const FooterView = () => (
       ]}
       copyright={
         <Fragment>
-          Copyright <Icon type="copyright" /> 2019 摆码王子
+          Copyright <Icon type="copyright" /> 2019 郑保乐
         </Fragment>
       }
     />
