@@ -129,7 +129,7 @@ export default class GlobalHeaderRight extends PureComponent {
         <Tooltip title={formatMessage({ id: 'component.globalHeader.help' })}>
           <a
             target="_blank"
-            href={docLink}
+            href="https://doc.authmore.letec.top"
             rel="noopener noreferrer"
             className={styles.action}
           >
