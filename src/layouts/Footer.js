@@ -8,19 +8,19 @@ const FooterView = () => (
     <GlobalFooter
       links={[
         {
-          key: '摆码王子的小屋',
-          title: '摆码王子的小屋',
-          href: 'https://b.letec.top',
+          key: '开发手册',
+          title: '开发手册',
+          href: 'https://doc.authmore.letec.top',
           blankTarget: true,
         },
         {
-          key: 'github',
+          key: 'GitHub',
           title: <Icon type="github" />,
           href: 'https://gitee.com/zbl1996',
           blankTarget: true,
         },
         {
-          key: 'gitee',
+          key: '码云',
           title: 'Gitee',
           href: 'https://gitee.com/zbl1996/authmore',
           blankTarget: true,
