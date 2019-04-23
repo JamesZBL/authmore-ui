@@ -10,7 +10,7 @@ const FooterView = () => (
         {
           key: 'doc',
           title: '开发手册',
-          href: 'https://doc.authmore.letec.top',
+          href: '//doc.authmore.letec.top',
           blankTarget: true,
         },
         {

@@ -12,7 +12,7 @@ const links = [
   {
     key: 'help',
     title: formatMessage({ id: 'layout.user.link.help' }),
-    href: "https://doc.authmore.letec.top",
+    href: "//doc.authmore.letec.top",
   },
   {
     key: 'community',
