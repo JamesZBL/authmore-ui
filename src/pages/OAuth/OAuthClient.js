@@ -34,6 +34,7 @@ class OAuthClient extends PureComponent {
   state = {
     selectedRows: [],
     currentRecord: {},
+    selectedRowKeys: [],
   };
 
   rowKey = 'clientId';
@@ -215,7 +216,8 @@ class OAuthClient extends PureComponent {
   rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
       this.setState({
-        selectedRows: selectedRows,
+        selectedRows,
+        selectedRowKeys
       });
     },
     getCheckboxProps: record => ({
@@ -228,7 +230,7 @@ class OAuthClient extends PureComponent {
       client: { data },
       loading,
     } = this.props;
-    const { selectedRows, editModalVisible, currentRecord } = this.state;
+    const { selectedRows, editModalVisible, currentRecord, selectedRowKeys } = this.state;
     const { handleUpdateModalVisible, handleUpdate } = this;
     const methods = { handleUpdateModalVisible, handleUpdate };
     return (
@@ -253,6 +255,7 @@ class OAuthClient extends PureComponent {
               columns={this.columns}
               onSelectRow={this.handleSelectRows}
               rowKey={this.rowKey}
+              selectedRowKeys={selectedRowKeys}
             />
           </div>
         </Card>

@@ -59,10 +59,15 @@ class StandardTable extends PureComponent {
 
   cleanSelectedKeys = () => {
     this.handleRowSelectChange([], []);
+    this.props.rowSelection.onChange([], []);
   };
 
   render() {
-    const { selectedRowKeys, needTotalList } = this.state;
+    const { needTotalList } = this.state;
+    let { selectedRowKeys } = this.props;
+    if (!selectedRowKeys)
+      selectedRowKeys = this.state.selectedRowKeys;
+
     const { data = {}, rowKey, ...rest } = this.props;
     const { list = [], pagination } = data;
 

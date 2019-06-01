@@ -24,6 +24,7 @@ class OAuthUser extends PureComponent {
   state = {
     selectedRows: [],
     currentRecord: {},
+    selectedRowKeys: [],
   };
 
   componentDidMount() {
@@ -100,7 +101,8 @@ class OAuthUser extends PureComponent {
   rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
       this.setState({
-        selectedRows: selectedRows,
+        selectedRows,
+        selectedRowKeys
       });
     },
     getCheckboxProps: record => ({
@@ -207,7 +209,7 @@ class OAuthUser extends PureComponent {
 
   render() {
     const { data, loading } = this.props;
-    const { selectedRows, currentRecord } = this.state;
+    const { selectedRows, currentRecord, selectedRowKeys } = this.state;
 
     return (
       <PageHeaderWrapper title={this.title}>
@@ -230,6 +232,7 @@ class OAuthUser extends PureComponent {
               data={data}
               columns={this.columns}
               rowKey={this.rowKey}
+              selectedRowKeys={selectedRowKeys}
             />
           </div>
         </Card>
